@@ -87,3 +87,38 @@ B5 нь 50-р мөрийн false салаа ба 49-р мөрийн score defini
 давталтын true/false ирмэгүүд, 46-р мөрийн kill, богино цувааны дараах
 score замыг хамруулна. Ингэснээр алдаагүй def-clear замтай бүх DU хосын
 эерэг/сөрөг predicate-use болон дахин definition-үүдийг тестлэнэ.
+
+## Хэсэг C: Fault seeding
+
+| Мутаци | Үр дүн | Илрүүлсэн тест |
+|---|---|---|
+| M1: 41-р мөрийн `streak = streak + 1`-ийг устгасан | Унасан | `b1_breakThenLongStreak`, `b6_fiveInARowExactThreshold`; expected 3/8, actual 0/5 |
+| M2: 43-р мөрийн `best = streak`-ийг `best = present` болгосон | Унасан | `b8_bestUsesStreakNotPresent`; expected 5, actual 8 |
+| M3: ашиглагдаагүй `total = present + best` нэмсэн | Унаагүй | `results/mvn-test-M3.txt` |
+
+M2 нь best шинэчлэгдэх үед `present` нь нийт ирэлтийн тоо, `streak` нь
+зөвхөн тухайн дарааллын урт байдаг тул ижил утгатай биш. Тусгай B8 тестийн
+өгөгдөлд `present=7`, `streak=4`; зөв код 5 оноо, M2 нь 8 оноо өгнө.
+Тиймээс B8-г нэмж M2 killer-ийг ажиллуулсан.
+
+M3 нь үр дүнд нөлөөлөхгүй dead definition тул runtime тест илрүүлэхгүй.
+Java compiler мөн анхааруулга өгөхгүй; IDE-ийн static analysis/unused local
+variable inspection ийм үхсэн тодорхойлолтыг илрүүлэх ёстой. Мутацийн
+гаралтууд `results/mvn-test-M1.txt`, `results/mvn-test-M2.txt`,
+`results/mvn-test-M2-kill.txt`, `results/mvn-test-M3.txt`-д хадгалагдсан.
+
+## Эцсийн хэмжилт ба дүгнэлт
+
+Эцсийн `mvn verify`-д 10 тест бүгд амжилттай ажилласан. `jacoco-final.csv`
+нь 0 branch missed, 16 branch covered, 1 line missed, 24 line covered
+гэж харуулсан; missed line нь далд constructor юм. ALL-DEFS шатны CSV-д
+мөн branch 16/16 байсан боловч DU хамралтыг дангаар нь нотлохгүй. Branch
+100% болсон ч ижил мөчийн бүх definition-ээс бүх reachable use рүү хүрсэн
+def-clear зам хамрагдсан гэж үзэх боломжгүй. DU анализ нь хувьсагчийн
+тодорхойлолт use дээр зөв утга дамжуулсан эсэхийг илүү нарийвчлан шалгадаг.
+Гэхдээ бүх хосыг гараар жагсаах, kill ба биелэшгүй замыг ялгах нь branch
+хамралтаас илүү үнэтэй. Энэ ажлын хамгийн их цаг авсан хэсэг нь bonus-ийн
+давталтын DU хүснэгт ба мутацийн үр дүнг баталгаажуулах байлаа.
+AI туслахыг CFG/DU хүснэгтийн бүтэц, JUnit тестийн зохион байгуулалт,
+Maven/JaCoCo гаралтыг шалгахад ашигласан; бүх мутацийг эх кодоор дахин
+ажиллуулж үр дүнг өөрөө баталгаажуулсан.

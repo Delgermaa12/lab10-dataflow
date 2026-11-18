@@ -52,4 +52,10 @@ class BonusTest {
         assertEquals(5, DataFlowTargets.bonus(new int[]{1, 0, 1}, 1));
     }
 
+    @Test
+    @DisplayName("B8: best must use streak, not present | present7 streak4")
+    void b8_bestUsesStreakNotPresent() {
+        assertEquals(5, DataFlowTargets.bonus(new int[]{1, 1, 1, 0, 1, 1, 1, 1}, 7));
+    }
+
 }
