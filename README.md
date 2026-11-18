@@ -77,3 +77,13 @@ score definition-ээс гадна 49-р мөрийн definition-ийг use-д �
 
 ALL-DEFS шатны `mvn verify` гаралт `results/mvn-verify-alldefs.txt`,
 JaCoCo CSV нь `results/jacoco-alldefs.csv` файлд байна.
+
+### ALL-DU-PAIRS шат
+
+B3 нь 32-р мөрийн throw салаа, B4 нь threshold-ийн throw салааг хамарна.
+B5 нь 50-р мөрийн false салаа ба 49-р мөрийн score definition-ийг 56-р
+мөрийн use хүртэл хүргэнэ. B6 нь threshold-тэй тэнцүү таван ирэлтийг,
+43-р мөрийн true салаа болон 54-р мөрийн нэмэгдлийг хамарна. B7 нь
+давталтын true/false ирмэгүүд, 46-р мөрийн kill, богино цувааны дараах
+score замыг хамруулна. Ингэснээр алдаагүй def-clear замтай бүх DU хосын
+эерэг/сөрөг predicate-use болон дахин definition-үүдийг тестлэнэ.
