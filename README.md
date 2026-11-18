@@ -43,3 +43,37 @@ Def/use: 13 (def x, y), 15 (p-use y), 16 (def tmp; c-use x, y),
 | y | 18 | 17 | c | 18-15-16-17 | gcdTwoIterations | тийм |
 | tmp | 16 | 18 | c | 16-17-18 | gcdTwoIterations | тийм |
 
+`gcd(7, 0)` нь давталтыг огт оруулахгүй тул анхны `x`-ийн 13->20,
+анхны `y`-ийн 13->15(F) хосуудыг дангаараа хамарна. `gcd(12, 8)` нь
+хоёр давталттай бөгөөд 17, 18-р мөрийн дахин тодорхойлолтуудаас эхэлсэн
+хосуудыг хамруулна.
+
+## Хэсэг B: bonus
+
+### CFG ба def/use жагсаалт
+
+CFG-г [cfg-bonus.png](./cfg-bonus.png) болон [cfg-bonus.dot](./cfg-bonus.dot)-д
+хадгалсан. `attendance` ба `threshold` нь 31-р мөрийн параметрийн definition;
+32-р мөрөнд хоёулаа predicate-use хийнэ. 35, 36, 37-р мөрүүд `present`,
+`streak`, `best`-ийг тодорхойлно. 38-р мөрөнд `attendance` predicate-use,
+`a`-ийн definition; 39-р мөрөнд `a` predicate-use байна.
+
+40-р мөрөнд `present` c-use ба дахин definition, 41-р мөрөнд `streak` c-use
+ба дахин definition, 42-р мөрөнд `streak` болон `best` predicate-use,
+43-р мөрөнд `streak` c-use ба `best` definition байна. 46-р мөрийн
+`streak = 0` нь өмнөх streak definition-үүдийг kill хийнэ. 49-р мөрөнд
+`score` definition, 50-р мөрөнд `present` ба `threshold` predicate-use,
+51-р мөрөнд `score` definition, 53-р мөрөнд `best` predicate-use,
+54-р мөрөнд `score` c-use ба definition, 56-р мөрөнд `score` c-use байна.
+
+### ALL-DEFS шат
+
+ALL-DEFS-д 2 тест хэрэгтэй. B1 нь алдаатай өдөр болон тав ба түүнээс урт
+дарааллыг хамруулж, `present`, `streak`, `best`, хоёр `score` definition-ийн
+ашиглалтыг хүргэнэ. B2 нь хоосон массив ба threshold=0 нөхцлөөр 51-р мөрийн
+score definition-ийг 56-р мөр хүртэл хүргэнэ. Нэг гүйцэтгэлд 51-р мөрийн
+score definition-ээс гадна 49-р мөрийн definition-ийг use-д хүргэх боломжгүй
+тул хоёр тестээс цөөнөөр бүх definition-ийг use-д хүргэж чадахгүй.
+
+ALL-DEFS шатны `mvn verify` гаралт `results/mvn-verify-alldefs.txt`,
+JaCoCo CSV нь `results/jacoco-alldefs.csv` файлд байна.
